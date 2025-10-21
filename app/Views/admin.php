@@ -50,7 +50,9 @@
                     <td class=""><?= $product['category_id'] ?></td>
                     <td class=""><?= $product['description'] ?></td>
                     <td class=""><?= $product['article'] ?></td>
-                    <td class=""><?= $product['img_path'] ?></td>
+                    <td class="">
+                        <img src="<?= $product['img_path'] ?>" alt="">
+                    </td>
                     <td class=""><?= $product['price'] ?></td>
                     <td class=""><?= $product['available'] ?></td>
 
