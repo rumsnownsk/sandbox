@@ -30,7 +30,8 @@ class MainController
             $products[$i]['category_id'] = $productData[$i]['category_id'] ?? '';
             $products[$i]['description'] = $productData[$i]['description'] ?? '';
             $products[$i]['article'] = $productData[$i]['code'] ?? '';
-            $products[$i]['img_path'] = empty($productData[$i]['pathName']) ? 'no photo' : $productData[$i]['pathName'] ;
+//            $products[$i]['img_path'] = empty($productData[$i]['pathName']) ? 'no photo' : $productData[$i]['pathName'] ;
+            $products[$i]['img_path'] = "https://miniature-prod.moysklad.ru/miniature/6f9f2730-acfa-11f0-0a80-1c4f0003e079/documentminiature/3626a278-199c-4d73-bfd9-ac9d65975017";
             $products[$i]['price'] = !empty($productData['salePrices'][0]['value']) ? $productData['salePrices'][0]['value'] / 100 : 0;
             $products[$i]['available'] = 5;
         }

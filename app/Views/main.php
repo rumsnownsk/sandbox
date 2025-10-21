@@ -28,6 +28,7 @@
                     <img src="" alt=""
                          class="">
                     <p class="product_item_title"><?= $product['name'] ?></p>
+                    <p class="product_item_title"><?= $product['name'] ?></p>
                     <p class="product_item_desc"><?= $product['description'] ?></p>
                     <p class="product_item_desc">категория: <?= $product['category_id'] ?></p>
                     <p class="product_item_desc">цена: <?= $product['price'] ?></p>
