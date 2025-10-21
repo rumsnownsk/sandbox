@@ -1,0 +1,8 @@
+log.php
+
+vendor
+composer.lock
+
+.idea
+.git
+.env
