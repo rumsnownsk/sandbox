@@ -91,6 +91,7 @@ class MainController
 
         $products = makeApiRequest($url, $headers)['rows'];
 
+
         $strValues = '';
         for ($i = 0; $i < count($products); $i++) {
             $strValues .= '(';
