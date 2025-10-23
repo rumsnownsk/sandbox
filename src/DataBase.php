@@ -29,7 +29,8 @@ class DataBase
     public function query(string $query, array $params=[]): static
     {
         $this->stmt = $this->connection->prepare($query);
-//        dd($params);
+//        dump($params, $query);
+
         $this->stmt->execute($params);
         return $this;
     }

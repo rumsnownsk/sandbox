@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>SANDBOX::ADMIN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="<?= base_url('/assets/css/main.css') ?>" rel="stylesheet"  crossorigin="anonymous">
 </head>
@@ -28,14 +28,14 @@
         <table class="table table-hover">
             <thead class="table-dark">
             <tr>
-                <th scope="col">Выбрать</th>
+                <th scope="col">#</th>
+                <th scope="col">Фото</th>
                 <th scope="col">ID</th>
                 <th scope="col">Название</th>
-                <th scope="col">Category ID</th>
+                <th scope="col">Категория</th>
                 <th scope="col">Описание</th>
                 <th scope="col">Артикул</th>
-                <th scope="col">Фото</th>
-                <th scope="col">Цена</th>
+                <th scope="col">Цена, &#8381;</th>
                 <th scope="col">Доступно</th>
             </tr>
             </thead>
@@ -45,18 +45,16 @@
                     <td class="">
                         <input type="checkbox" name="" value="0">
                     </td>
-                    <td class=""><?= $product['id'] ?></td>
-                    <td class=""><?= $product['name'] ?></td>
-                    <td class=""><?= $product['category_id'] ?></td>
-                    <td class=""><?= $product['description'] ?></td>
-                    <td class=""><?= $product['article'] ?></td>
                     <td class="">
                         <img src="<?= $product['img_path'] ?>" alt="">
                     </td>
-                    <td class=""><?= $product['price'] ?></td>
+                    <td class="" style="font-size: 75%;"><?= $product['id'] ?></td>
+                    <td class=""><?= $product['name'] ?></td>
+                    <td class=""><?= $product['pathName'] ?></td>
+                    <td class=""><?= $product['description'] ?></td>
+                    <td class=""><?= $product['article'] ?></td>
+                    <td class=""><?= $product['salePrices'] ?></td>
                     <td class=""><?= $product['available'] ?></td>
-
-
                 </tr>
             <?php endforeach; ?>
             </tbody>

@@ -8,3 +8,8 @@ $app = new \Rum\Sandbox\Application();
 require_once CONFIG.'/routes.php';
 
 $app->run();
+
+
+// TODO: библиотеку для работы с БД
+// TODO: сделать класс CurlHandle
+// TODO: создание констант из .env
