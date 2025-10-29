@@ -5,12 +5,12 @@ namespace Rum\Sandbox;
 
 class View
 {
-    public string $layout = LAYOUT;
+    public string $layout;
     public string $content = '';
 
     public function __construct($layout = '')
     {
-        $this->layout = false;
+        $this->layout = $layout ?: LAYOUT;
     }
 
     public function render($view,$data = [], $layout=''): string
