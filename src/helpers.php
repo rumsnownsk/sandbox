@@ -81,7 +81,16 @@ function read_env(string $key)
 
 function makeApiRequest(string $url, $headers=[]): array
 {
-    $token = read_env('MOYSKLAD_TOKEN');
+    if (empty($headers)){
+        $token = read_env('MOYSKLAD_TOKEN');
+
+        $headers = array(
+            "Authorization: Bearer {$token}",
+            "Accept-Encoding: gzip",
+            "Lognex-Pretty-Print-JSON: true"
+        );
+    };
+
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -92,6 +101,45 @@ function makeApiRequest(string $url, $headers=[]): array
     $response = curl_exec($ch);
 //    dump(json_decode($response, true));
     return json_decode($response, true);
+}
+
+function downloadImage($url, $pathBase, $headers, $id) {
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    $data = curl_exec($ch);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    $headersStr = substr($data, 0, $header_size);
+    $body = substr($data, $header_size);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $err = curl_error($ch);
+    curl_close($ch);
+
+    if ($code == 200 && $body) {
+        $ext = '.jpg';
+        if (preg_match('/Content-Type:\s*(image\/\w+)/i', $headersStr, $m)) {
+            switch ($m[1]) {
+                case 'image/png':  $ext = '.png';  break;
+                case 'image/webp': $ext = '.webp'; break;
+                case 'image/jpeg': $ext = '.jpg';  break;
+            }
+        }
+        $path = $pathBase . $ext;
+
+//        dd('v');
+        file_put_contents($path, $body);
+        if (filesize($path) < 10) {
+            file_put_contents(__DIR__.'/../logs/msk_img_error.log', "[".date('c')."] id=$id file too small\n", FILE_APPEND);
+            @unlink($path);
+            return null;
+        }
+        return $path;
+    } else {
+        file_put_contents(__DIR__.'/../logs/msk_img_error.log', "[".date('c')."] id=$id url=$url ERR=$err\n", FILE_APPEND);
+    }
+    return null;
 }
 
 

@@ -25,10 +25,9 @@ btnSync.addEventListener('click', (e)=>{
             i++;
         }
     })
-    // console.log(idsList)
+    console.log(idsList)
     fetch('/syncWithDb', {
         method: 'post',
-        // body: [idsList],
         body: new URLSearchParams(idsList).toString(),
         headers:{
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -39,6 +38,9 @@ btnSync.addEventListener('click', (e)=>{
             console.log(data)
             btnSync.disabled = false
             btnSync.textContent = 'Sync'
+            if (data.redirect){
+                window.location.replace(data.redirect)
+            }
 
         })
 })
