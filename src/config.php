@@ -16,7 +16,7 @@ const CORE = ROOT.'/core';
 const VIEWS = APP.'/Views';
 const ERROR_LOGS = ROOT.'/tmp/errors.log';
 const CACHE =ROOT.'/tmp/cache';
-const LAYOUT = '';
+const LAYOUT = 'layoutCommon';
 const PATH = '';
 const IMAGES = WWW.'/images';
 
