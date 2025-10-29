@@ -18,8 +18,8 @@ class Category
         $this->setListAllCategories();
         $this->setListProductsFromAllCategories();
 
-        dump($this->listAllCategories);
-        dump($this->listProductsFromAllCategories);
+//        dump($this->listAllCategories);
+//        dump($this->listProductsFromAllCategories);
     }
 
 //    protected function getListCategories(): void
@@ -79,5 +79,13 @@ class Category
         return $this->listProductsFromAllCategories[$productId]['available']?? 'non';
     }
 
+    public function getCategoryId($productFolderHref): string
+    {
+        $xplArr = explode('/', $productFolderHref);
+        $uuid = array_pop($xplArr);
+
+        $res = db()->query("select id, name FROM categories WHERE uuid=?", [$uuid])->getOne();
+        return $res['id'];
+    }
 
 }

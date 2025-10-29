@@ -10,7 +10,7 @@ use Rum\Sandbox\Application;
 
 $app->router->get('/', [MainController::class, 'main']);
 $app->router->get('/admin', [AdminController::class, 'index']);
-$app->router->get('/admin/sync', [MainController::class, 'sync']);
+$app->router->get('/admin/sync', [AdminController::class, 'sync']);
 
 $app->router->post('/syncWithDb', [AdminController::class, 'syncWithDb'])->withoutCsrfToken();
 

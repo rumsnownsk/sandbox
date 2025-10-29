@@ -6,14 +6,14 @@ use App\Models\Category;
 
 class AdminController
 {
-//    public function index(): string
-//    {
-//        $products = db()->query('SELECT * FROM `moysklad_product` order by id desc limit 10')->get();
-//
-//        return view('admin/index', ['products' => $products]);
-//    }
-
     public function index(): string
+    {
+        return view('admin/index', [
+
+        ]);
+    }
+
+    public function sync(): string
     {
 //        $url = "https://api.moysklad.ru/api/remap/1.2/report/stock/bystore?filter=productFolder=https://api.moysklad.ru/api/remap/1.2/entity/productfolder/9d35a763-af1f-11f0-0a80-075b0007d49e";
         $url = "https://api.moysklad.ru/api/remap/1.2/entity/product";
@@ -23,6 +23,7 @@ class AdminController
         $products = [];
 
         for ($i = 0; $i < count($productData); $i++) {
+//            dd($productData);
             $products[$i]['id'] = $productData[$i]['id'];
             $products[$i]['name'] = $productData[$i]['name'];
             $products[$i]['description'] = $productData[$i]['description'] ?? '';
@@ -33,20 +34,9 @@ class AdminController
             $products[$i]['available'] = $category->availableProducts($productData[$i]['id']);
         }
 
-        return view('admin/index', [
+        return view('admin/sync', [
             'products' => $products
         ]);
-    }
-
-    protected function getTinyImageUrl($imagesMetaHref): string
-    {
-        if ( empty($imagesMetaHref)) {
-            return '';
-        }
-
-        $imgUrl = makeApiRequest($imagesMetaHref);
-
-        return $imgUrl['rows'][0]['miniature']['downloadHref'] ?? '';
     }
 
     public function syncWithDb(): void
@@ -68,15 +58,20 @@ class AdminController
         $url = read_env('MOYSKLAD_API_URL') . "entity/product?filter=$ids_str";
 
         $products = makeApiRequest($url)['rows'];
-        dd($products);
+//        dump($products);
+
+        $categoryModel = new Category();
 
         foreach ($products as $product) {
-            $id = $product['id'] ?? null;
-            $name = $product['name'] ?? '';
+//            dd($product);
+//            dd($categoryModel->);
+            $id = $product['id'];
+            $name = $product['name'];
             $article = $product['article'] ?? '';
-            $category_id = $product['pathName'] ?? '';
+            $category_id = (int)$categoryModel->getCategoryId($product['productFolder']['meta']['href']);
             $price = !empty($product['salePrices'][0]['value']) ? $product['salePrices'][0]['value'] / 100 : 0;
-            $available = 888;
+            $available = $categoryModel->availableProducts($id);
+//            $available = 999999;
             $imgPath = null;
             $imageUrlApi = null;
             $description = $product['description'] ?? '';
@@ -105,21 +100,42 @@ class AdminController
                     $imgPath = downloadImage($imageUrlApi, $imagePath, $headers, $id);
                 }
             }
+//            dd($category->availableProducts($id));
+//            dd([
+//                'id' => $id,
+//                'name' => $name,
+//                'description' => $description,
+//                'article' => $article,
+//                'price' => $price,
+//                'image_url_api' => $imageUrlApi,
+//                'image_path' => $imgPath,
+//                'category' => $category,
+//                'available' => $available
+//            ]);
 
             db()->query("
                 INSERT INTO moysklad_product
-                    (UUID, name, description, article, price, category, img_path, image_url_api, available)
+                    (id, name, description, article, price, category_id, image_path, image_url_api, available)
                 VALUES
-                    (:UUID, :name, :description, :article, :price, :category, :img_path, :image_url_api, :available)",
+                    (:id, :name, :description, :article, :price, :category_id, :image_path, :image_url_api, :available)
+                ON DUPLICATE KEY UPDATE
+                    name = VALUES(name),
+                    description = VALUES(description),
+                    article = VALUES(article),
+                    price = VALUES(price),
+                    category_id = VALUES(category_id),
+                    image_path = VALUES(image_path),
+                    image_url_api = VALUES(image_url_api),
+                    available = VALUES(available)",
                 [
-                    'UUID' => $id,
+                    'id' => $id,
                     'name' => $name,
                     'description' => $description,
                     'article' => $article,
                     'price' => $price,
-                    'category_id' => $category_id,
                     'image_url_api' => $imageUrlApi,
-                    'img_path' => $imgPath,
+                    'image_path' => $imgPath,
+                    'category_id' => $category_id,
                     'available' => $available
                 ]
             );
@@ -227,4 +243,14 @@ class AdminController
 //
 //    }
 
+    protected function getTinyImageUrl($imagesMetaHref): string
+    {
+        if ( empty($imagesMetaHref)) {
+            return '';
+        }
+
+        $imgUrl = makeApiRequest($imagesMetaHref);
+
+        return $imgUrl['rows'][0]['miniature']['downloadHref'] ?? '';
+    }
 }
