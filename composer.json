@@ -3,7 +3,8 @@
     "autoload": {
         "psr-4": {
             "Rum\\Sandbox\\": "src/",
-            "App\\Controllers\\": "app/Controllers"
+            "App\\Controllers\\": "app/Controllers",
+            "App\\Models\\": "app/Models"
         }
     },
     "authors": [
