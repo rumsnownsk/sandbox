@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Category;
 
-class AdminController
+class AdminController extends BaseController
 {
     public function index(): string
     {

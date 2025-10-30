@@ -2,7 +2,7 @@
     <div class="headContent">
         <div class="buttons">
             <div class="buttonsLeft">
-                <a href="<?= base_url('/') ?>"
+                <a href="<?= base_url('/admin') ?>"
                    class="btn btn-dark"
                 >Admin Panel</a>
             </div>
