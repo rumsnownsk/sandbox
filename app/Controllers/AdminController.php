@@ -8,8 +8,25 @@ class AdminController
 {
     public function index(): string
     {
-        return view('admin/index', [
+        $urlWh = "https://api.moysklad.ru/api/remap/1.2/entity/store";
+        $rawsWarehouses = makeApiRequest($urlWh)['rows'];
+        $warehouses = [];
+        for ($i = 0; $i < count($rawsWarehouses); $i++) {
+            $warehouses[$i]['id'] = $rawsWarehouses[$i]['id'];
+            $warehouses[$i]['name'] = $rawsWarehouses[$i]['name'];
+        }
 
+        $urlCats = "https://api.moysklad.ru/api/remap/1.2/entity/productfolder";
+        $rawsCategories = makeApiRequest($urlCats)['rows'];
+        $categories = [];
+        for ($i = 0; $i < count($rawsCategories); $i++) {
+            $categories[$i]['id'] = $rawsCategories[$i]['id'];
+            $categories[$i]['name'] = $rawsCategories[$i]['name'];
+        }
+
+        return view('admin/index', [
+            'warehouses' => $warehouses,
+            'categories' => $categories
         ]);
     }
 
@@ -243,14 +260,5 @@ class AdminController
 //
 //    }
 
-    protected function getTinyImageUrl($imagesMetaHref): string
-    {
-        if ( empty($imagesMetaHref)) {
-            return '';
-        }
 
-        $imgUrl = makeApiRequest($imagesMetaHref);
-
-        return $imgUrl['rows'][0]['miniature']['downloadHref'] ?? '';
-    }
 }
