@@ -4,6 +4,7 @@
 
 use App\Controllers\MainController;
 use App\Controllers\AdminController;
+use App\Controllers\AjaxController;
 
 use Rum\Sandbox\Application;
 
@@ -13,6 +14,8 @@ $app->router->get('/admin', [AdminController::class, 'index']);
 $app->router->get('/admin/sync', [AdminController::class, 'sync']);
 
 $app->router->post('/syncWithDb', [AdminController::class, 'syncWithDb'])->withoutCsrfToken();
+
+$app->router->post('/getcategories', [AjaxController::class, 'getcategories'])->withoutCsrfToken();
 
 $app->router->get("/test", [MainController::class, 'test'])->withoutCsrfToken();
 //$app->router->get("/admin/build/create", [\App\Controllers\AdminController::class, 'create']);

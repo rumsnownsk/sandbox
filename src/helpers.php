@@ -142,5 +142,12 @@ function downloadImage($url, $pathBase, $headers, $id) {
     return null;
 }
 
+function explodeHref(string $hrefUrl): string
+{
+    $xplArr = explode('/', $hrefUrl);
+    $uuidRaw = array_pop($xplArr);
+    return substr($uuidRaw, 0, strpos($uuidRaw, '?'));
+}
+
 
 
